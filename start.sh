@@ -35,4 +35,5 @@ cd ..
 echo "Starte das Frontend..."
 cd frontend  # Wechsel ins Frontend-Verzeichnis
 npm install  # Installiere die Frontend-Abhängigkeiten (falls noch nicht gemacht)
+export NODE_OPTIONS=--openssl-legacy-provider
 npm start  # Starte das Frontend
