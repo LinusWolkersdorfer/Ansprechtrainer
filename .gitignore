@@ -176,3 +176,5 @@ cython_debug/
 # images and uploads folder
 backend/images/*
 backend/uploads/*
+
+.vscode/*
