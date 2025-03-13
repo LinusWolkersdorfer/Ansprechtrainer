@@ -19,14 +19,17 @@ export default function App() {
   }, []);
 
   const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
+    const uploadedFile = e.target.files[0];
+    setFile(uploadedFile);
+    setSelectedFile(uploadedFile.name);  // Speichern des Dateinamens
+    uploadFile(uploadedFile); // Direkt nach der Auswahl die Datei hochladen
   };
 
   const handleFileSelect = (e) => {
     setSelectedFile(e.target.value);
   };
 
-  const uploadFile = async () => {
+  const uploadFile = async (file) => {
     if (!file) return;
     const formData = new FormData();
     formData.append("file", file);
@@ -93,28 +96,59 @@ export default function App() {
     }
   };
 
-  const restartQuiz = () => {
+  const restartQuiz = async () => {  // Füge async hier hinzu
     setCurrentIndex(0);
     setCorrectCount(0);
     setWrongCount(0);
     setShowResults(false);
     setShowSolution(false);
+  
+    // Call the shuffle endpoint to shuffle the images
+    if (selectedFile) {
+      try {
+        const response = await fetch(`http://localhost:5000/shuffle/${selectedFile}`, {
+          method: 'POST',
+        });
+        const data = await response.json();
+        setImages(data.images);  // Update the images with the new shuffled order
+      } catch (error) {
+        console.error("Fehler beim Mischen der Bilder:", error);
+      }
+    }
   };
+  
 
   return (
     <div className="container">
       <h1 className="title">Ansprechtrainer</h1>
+
       <div className="file-upload">
-        <input type="file" onChange={handleFileChange} className="file-input" />
+        <input 
+          type="file" 
+          onChange={handleFileChange} 
+          className="file-input" 
+          id="file-upload" 
+        />
+        <label htmlFor="file-upload">pdf auswählen</label>
       </div>
-      <div>
-        <button onClick={uploadFile} className="btn-upload">
-          Bestätigen
-        </button>
-      </div>
+
+      {/* Textfeld für die angezeigte Datei */}
+      {selectedFile && (
+        <div className="selected-file">
+          <p>Ausgewählte Datei: <strong>{selectedFile.replace('.pdf', '')}</strong></p>
+        </div>
+      )}
+
       {showResults ? (
         <div className="results">
-          <h2 className="results-title">Ergebnisse</h2>
+          <h2 className="results-title">Ergebniss:</h2>
+          <h3 className="results-subtitle">
+            {correctCount === correctCount + wrongCount
+              ? "Perfekt!"
+              : correctCount / (correctCount + wrongCount) > 0.9
+              ? "Sehr gut!"
+              : "Du solltest noch üben"}
+          </h3>
           <p className="results-summary">
             Richtig: {correctCount} | Falsch: {wrongCount}
           </p>
@@ -142,10 +176,10 @@ export default function App() {
             ) : (
               <div className="btn-container">
                 <button onClick={() => nextImage(true)} className="btn-correct">
-                  Gewusst ✅
+                  Gewusst
                 </button>
                 <button onClick={() => nextImage(false)} className="btn-wrong">
-                  Nicht gewusst ❌
+                  Nicht gewusst
                 </button>
               </div>
             )}
