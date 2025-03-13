@@ -172,3 +172,9 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+# images and uploads folder
+backend/images/*
+backend/uploads/*
+
+.vscode/*
