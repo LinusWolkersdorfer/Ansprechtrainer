@@ -4,12 +4,13 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
+  min-height: 100vh; /* Volle Höhe der Seite */
   padding: 20px;
   background-color: #1e1e1e; /* Dunkler Hintergrund für Darkmode */
   font-family: Arial, sans-serif;
-  margin-top: -50px;
+  margin: 0;
   position: relative;
+  overflow: hidden; /* Verhindert Überlappen von Inhalten */
 }
 
 /* Titel */
@@ -45,6 +46,7 @@ button {
   background-color: #007bff;
   color: white;
   margin-bottom: 20px;
+  font-weight: bold;
 }
 
 .btn-upload:hover {
@@ -53,7 +55,8 @@ button {
 
 .btn-reveal {
   background-color: #ffc107;
-  color: white;
+  color: rgb(0, 0, 0);
+  font-weight: bold;
 }
 
 .btn-reveal:hover {
@@ -97,11 +100,17 @@ button {
 .results-title {
   font-size: 1.5rem;
   font-weight: bold;
+  color: white;
 }
 
 .results-summary {
   font-size: 1.2rem;
   margin-top: 10px;
+  color: white;
+}
+
+.results-subtitle {
+  color: white;
 }
 
 /* Quiz */
@@ -109,6 +118,7 @@ button {
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%; /* Stelle sicher, dass der Container die volle Breite einnimmt */
 }
 
 .progress {
@@ -118,37 +128,30 @@ button {
 }
 
 .quiz-image {
-  max-width: 100%;
-  max-height: 400px;
+  width: 100%; /* Bild auf 100% der Breite setzen */
+  max-width: 600px; /* Maximale Breite des Bildes */
+  max-height: 400px; /* Maximale Höhe des Bildes */
   border: 2px solid #ccc;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
+  transition: transform 0.3s ease; /* Bild-Effekt */
 }
 
 /* Button-Container */
 .btn-container {
   display: flex;
   gap: 10px;
-  margin-top: 10px;
+  justify-content: center;
+  margin-top: 20px;
 }
 
+/* Den Fortschritt und Bestätigungs-Button zentral ausrichten */
 .quiz-container {
   position: relative;
   padding-bottom: 80px; /* Platz für Buttons schaffen */
 }
 
-.quiz-image {
-  transition: margin-top 0.2s ease-in-out; /* Animiert den Übergang für Bildposition */
-}
-
-/* Schaltflächen nebeneinander und den Container anpassen */
-.btn-correct,
-.btn-wrong {
-  width: 150px;
-}
-
-/* Fortschritt und Bestätigen-Button */
 .progress {
   z-index: 2; /* Stellt sicher, dass der Fortschritt nicht von den Buttons überlappt wird */
   margin-bottom: 20px;
@@ -162,8 +165,63 @@ button {
   position: relative; /* Verhindert Überlappung mit dem Fortschrittstext */
 }
 
-.btn-container {
-  justify-content: center;
+/* Breite der Buttons */
+.btn-correct,
+.btn-wrong {
+  width: 170px;
+  color: rgb(0, 0, 0);
+  font-weight: bold;
+}
+
+/* Verhindert übermäßige Höhe und verschwindende Elemente */
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.quiz-container {
   display: flex;
-  margin-top: 20px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 20px;
+}
+
+/* Datei-Upload Input */
+.file-input {
+  display: none; /* Versteckt das native File-Input */
+}
+
+.file-input + label {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.file-input + label:hover {
+  background-color: #0056b3;
+}
+
+/* Textfeld für die angezeigte Datei */
+.selected-file {
+  background-color: #343a40; /* Dunkler Hintergrund */
+  color: #ffffff;            /* Weißer Text */
+  padding: 8px;              /* Weniger Abstand */
+  border-radius: 5px;
+  margin-top: 10px;
+  font-size: 0.9rem;         /* Kleinere Schrift */
+  width: 100%;
+  max-width: 230px;          /* Kleinere maximale Breite */
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Verhindert weißen Balken am unteren Rand */
+html, body {
+  height: 100%;
+  overflow: hidden; /* Verhindert das Scrollen */
 }
